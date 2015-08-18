@@ -52,13 +52,10 @@
         iterator(collection[i], i, collection);
       }
     }
-    else if (typeof collection === 'object'){
+    else {
       for (var key in collection){
         iterator(collection[key], key, collection);
       }
-    }
-    else{
-      console.log("error - need object or array");
     }
   };
 
@@ -216,9 +213,9 @@
     // TIP: Try re-using reduce() here.
     iterator = iterator || _.identity;
 
-    return !!_.reduce( collection, function( memo, item ) {
+    return !!_.reduce(collection, function( memo, item ) {
       return memo && !!iterator(item);
-    }, true );
+    },true);
   };
 
   // Determine whether any of the elements pass a truth test. If no iterator is
@@ -380,6 +377,13 @@
   // Calls the method named by functionOrKey on each value in the list.
   // Note: You will need to learn a bit about .apply to complete this.
   _.invoke = function(collection, functionOrKey, args) {
+    return _.map(collection, function(item){
+      if(typeof functionOrKey === 'function'){
+        return functionOrKey.apply(item,args);
+      } else {
+        return item[functionOrKey](args);
+      }
+    });
   };
 
   // Sort the object's values by a criterion produced by an iterator.
