@@ -110,13 +110,26 @@
 
   // Produce a duplicate-free version of the array.
   _.uniq = function(array) {
-    var dedubed = [];
+    // var dedubed = [];
 
-    _.each(array, function(elem, index){
-        if(_.indexOf(dedubed,elem) < 0){
-          dedubed.push(elem);
-        }
-    });
+    // _.each(array, function(elem, index){
+    //     if(_.indexOf(dedubed,elem) < 0){
+    //       dedubed.push(elem);
+    //     }
+    // });
+
+    // return dedubed;
+
+    var dedubed = [];
+    var results = {};
+
+    for(var i = 0; i < array.length; i++){
+      results[array[i]] = array[i];
+    }
+
+    for(var key in results){
+      dedubed.push(results[key]);
+    }
 
     return dedubed;
   };
