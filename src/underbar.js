@@ -251,11 +251,29 @@
   //     bla: "even more stuff"
   //   }); // obj1 now contains key1, key2, key3 and bla
   _.extend = function(obj) {
+    if(arguments.length > 1){
+      for(var i = 1; i < arguments.length; i++){
+        _.each(arguments[i], function(value, key){
+          obj[key] = value;
+       });
+      }
+    }
+    return obj;
   };
 
   // Like extend, but doesn't ever overwrite a key that already
   // exists in obj
   _.defaults = function(obj) {
+    if(arguments.length > 1){
+      for(var i = 1; i < arguments.length; i++){
+        _.each(arguments[i], function(value, key){
+          if(!obj.hasOwnProperty(key)){
+            obj[key] = value;
+          }
+       });
+      }
+    }
+    return obj;
   };
 
 
@@ -299,6 +317,17 @@
   // already computed the result for the given argument and return that value
   // instead if possible.
   _.memoize = function(func) {
+    var results = {};
+    var slice = Array.prototype.slice;
+    return function(){
+      var args = slice.call(arguments);
+      if(results[args]){
+        return results[args];
+      } else {
+        results[args] = func.apply(this, args);
+        return results[args];
+      }
+    }
   };
 
   // Delays a function for the given number of milliseconds, and then calls
@@ -308,7 +337,12 @@
   // parameter. For example _.delay(someFunction, 500, 'a', 'b') will
   // call someFunction('a', 'b') after 500ms
   _.delay = function(func, wait) {
+    var slice = Array.prototype.slice.call(arguments, 2);
+    return setTimeout(function(){
+      return func.apply(this, slice);
+    }, wait);
   };
+
 
 
   /**
@@ -322,6 +356,16 @@
   // input array. For a tip on how to make a copy of an array, see:
   // http://mdn.io/Array.prototype.slice
   _.shuffle = function(array) {
+    var newArray = array.slice();
+
+    for(var i = newArray.length -1; i >= 0; i--){
+      var randomIndex = Math.floor(Math.random()*newArray.length);
+
+      var temp = newArray[i];
+      newArray[i] = newArray[randomIndex];
+      newArray[randomIndex] = temp;
+    }
+    return newArray;
   };
 
 
